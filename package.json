@@ -1,0 +1,30 @@
+{
+  "name": "rentify-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --watch server server.js",
+    "rentify:migrate": "sequelize --options-path ./.sequelize-rentify --env rentify db:migrate",
+    "rentify:migrate:reset": "sequelize --options-path ./.sequelize-rentify --env rentify db:migrate:undo:all && npm run rentify:migrate",
+    "rentify:seed": "sequelize --options-path ./.sequelize-rentify --env rentify db:seed:all",
+    "rentify:revert:seed": "sequelize --options-path ./.sequelize-rentify --env rentify db:seed:undo:all",
+    "create-index": "node ./server/elastic-search/createIndex.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "http-status-code": "^2.1.0",
+    "joi": "^17.13.1",
+    "helmet": "^5.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "nodemon": "^3.1.0",
+    "pg": "^8.11.5",
+    "sequelize": "^6.37.3",
+    "sequelize-cli": "^6.6.2"
+  }
+}
