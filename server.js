@@ -7,9 +7,13 @@ const path = require("path");
 const http = require("http");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");
+const uuid = require("node-uuid");
 const debug = require("debug")("netify:server");
+const httpContext = require("express-http-context");
 
 const app = express();
+
+const UserRouter = require("./server/userManagement&Auth/routes/index");
 
 app.use(
   helmet({
@@ -18,6 +22,28 @@ app.use(
 );
 
 app.use(cors());
+app.use(bodyParser.json());
+
+app.use(httpContext.middleware);
+
+app.use(function (req, res, next) {
+  httpContext.set("reqId", uuid.v1());
+  res.header("X-XSS-Protection", "1; mode=block");
+  res.header("X-Frame-Options", "deny");
+  res.header("X-Content-Type-Options", "nosniff");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, PUT, POST, DELETE , HEAD , OPTIONS"
+  );
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept,Authorization, X-Token"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+app.use("/api", UserRouter);
 
 const port = process.env.REACT_APP_SERVER_PORT || 3000;
 
